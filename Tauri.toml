@@ -1,0 +1,24 @@
+"$schema" = "https://schema.tauri.app/config/2"
+productName = "pytauri-react-starter"
+version = "0.1.0"
+identifier = "com.pytauri-react-starter.app"
+
+[build]
+frontendDist = "./build"
+
+[app]
+withGlobalTauri = true
+
+[[app.windows]]
+title = "Pytauri + React starter"
+width = 1280
+height = 768
+
+minWidth = 1280
+minHeight = 768
+
+maxWidth = 1920
+maxHeight = 1080
+
+maximized = false
+resizable = true
