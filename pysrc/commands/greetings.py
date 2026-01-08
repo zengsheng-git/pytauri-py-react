@@ -23,5 +23,5 @@ class GreetRequest(_BaseModel):
 @commands.command()
 async def greet(body: GreetRequest, webview_window: WebviewWindow) -> str:
     """Greet a user with a personalized message."""
-    #webview_window.set_title(f"Hello {body.name}!")
-    return f"Hello, {body.name}! Welcome to PyTauri Wheel + Vite + React starter."
+    webview_window.set_title(f"Hello {body.name}!")
+    return f"Hello, {body.name}! , 测试调用 Python"

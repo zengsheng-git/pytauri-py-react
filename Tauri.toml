@@ -10,7 +10,7 @@ frontendDist = "./build"
 withGlobalTauri = true
 
 [[app.windows]]
-title = "Pytauri + React starter"
+title = "Mlx-lm-lora"
 width = 1280
 height = 768
 

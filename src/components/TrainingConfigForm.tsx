@@ -160,13 +160,13 @@ export default function TrainingConfigForm() {
 
   return (
     <div className="training-form">
-      <h1>MLX-LM-LoRA 训练配置 啊啊88啊</h1>
+      <h1>MLX-LM-LoRA 训练配置</h1>
 
       <div className="form-section">
         <h2>基本配置</h2>
         <div className="form-row">
           <label>
-            模型路径:
+            model 模型路径:
             <input
               type="text"
               value={config.model}
@@ -177,7 +177,7 @@ export default function TrainingConfigForm() {
         </div>
         <div className="form-row">
           <label>
-            数据集路径:
+            data 数据集路径:
             <input
               type="text"
               value={config.data}
@@ -188,7 +188,7 @@ export default function TrainingConfigForm() {
         </div>
         <div className="form-row">
           <label>
-            训练类型:
+            trainType 训练类型:
             <select
               value={config.trainType}
               onChange={(e) => handleInputChange("trainType", e.target.value)}
@@ -201,7 +201,7 @@ export default function TrainingConfigForm() {
         </div>
         <div className="form-row">
           <label>
-            训练模式:
+            trainMode 训练模式:
             <select
               value={config.trainMode}
               onChange={(e) => handleInputChange("trainMode", e.target.value)}
@@ -224,7 +224,7 @@ export default function TrainingConfigForm() {
         <h2>训练参数</h2>
         <div className="form-row">
           <label>
-            批次大小:
+            batchSize 批次大小:
             <input
               type="number"
               value={config.batchSize}
@@ -234,7 +234,7 @@ export default function TrainingConfigForm() {
         </div>
         <div className="form-row">
           <label>
-            学习率:
+            learningRate 学习率:
             <input
               type="number"
               step="1e-6"
@@ -245,7 +245,7 @@ export default function TrainingConfigForm() {
         </div>
         <div className="form-row">
           <label>
-            迭代次数:
+            iters 迭代次数:
             <input
               type="number"
               value={config.iters || ""}
@@ -256,7 +256,7 @@ export default function TrainingConfigForm() {
         </div>
         <div className="form-row">
           <label>
-            训练轮数:
+            epochs 训练轮数:
             <input
               type="number"
               value={config.epochs || ""}
@@ -267,7 +267,7 @@ export default function TrainingConfigForm() {
         </div>
         <div className="form-row">
           <label>
-            最大序列长度:
+            maxSeqLength 最大序列长度:
             <input
               type="number"
               value={config.maxSeqLength}
@@ -281,7 +281,7 @@ export default function TrainingConfigForm() {
         <h2>LoRA 参数</h2>
         <div className="form-row">
           <label>
-            LoRA 秩:
+            loraRank LoRA 秩:
             <input
               type="number"
               value={config.loraRank}
@@ -317,7 +317,7 @@ export default function TrainingConfigForm() {
         <h2>高级参数</h2>
         <div className="form-row">
           <label>
-            优化器:
+            optimizer 优化器:
             <select
               value={config.optimizer}
               onChange={(e) => handleInputChange("optimizer", e.target.value)}
@@ -330,7 +330,7 @@ export default function TrainingConfigForm() {
         </div>
         <div className="form-row">
           <label>
-            梯度累积步数:
+            gradientAccumulationSteps 梯度累积步数:
             <input
               type="number"
               value={config.gradientAccumulationSteps}
@@ -340,7 +340,7 @@ export default function TrainingConfigForm() {
         </div>
         <div className="form-row">
           <label>
-            验证批次数量:
+            valBatches 验证批次数量:
             <input
               type="number"
               value={config.valBatches}
@@ -350,7 +350,7 @@ export default function TrainingConfigForm() {
         </div>
         <div className="form-row">
           <label>
-            每多少步报告一次:
+            stepsPerReport 每多少步报告一次:
             <input
               type="number"
               value={config.stepsPerReport}
@@ -360,7 +360,7 @@ export default function TrainingConfigForm() {
         </div>
         <div className="form-row">
           <label>
-            每多少步验证一次:
+            stepsPerEval 每多少步验证一次:
             <input
               type="number"
               value={config.stepsPerEval}
@@ -370,7 +370,7 @@ export default function TrainingConfigForm() {
         </div>
         <div className="form-row">
           <label>
-            每多少步保存一次:
+            saveEvery 每多少步保存一次:
             <input
               type="number"
               value={config.saveEvery}
@@ -380,7 +380,7 @@ export default function TrainingConfigForm() {
         </div>
         <div className="form-row">
           <label>
-            适配器保存路径:
+            adapterPath 适配器保存路径:
             <input
               type="text"
               value={config.adapterPath}
@@ -390,7 +390,7 @@ export default function TrainingConfigForm() {
         </div>
         <div className="form-row">
           <label>
-            使用梯度检查点:
+            gradCheckpoint 使用梯度检查点:
             <input
               type="checkbox"
               checked={config.gradCheckpoint}
@@ -415,7 +415,7 @@ export default function TrainingConfigForm() {
         </div>
         <div className="form-row">
           <label>
-            损失类型:
+            lossType 损失类型:
             <select
               value={config.lossType}
               onChange={(e) => handleInputChange("lossType", e.target.value)}
