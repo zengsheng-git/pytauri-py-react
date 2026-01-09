@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { pyInvoke } from "tauri-plugin-pytauri-api";
 import * as echarts from 'echarts'; // 引入ECharts
+import styles from './TrainingConfigForm.module.css'; // 导入 CSS module
 
 interface TrainingConfig {
   model: string;
@@ -108,7 +109,7 @@ export default function TrainingConfigForm() {
   const chartInstanceRef = useRef(null);
 
 // 提取loss值和时间的函数
-function extractLogInfo(logString) {
+function extractLogInfo(logString: string) {
     // 定义正则：同时匹配时间和loss值（用两个捕获组）
     // 时间匹配：\[(\d{2}:\d{2})<  → 匹配[后、<前的 两位数字:两位数字
     // loss匹配：loss=(\d+\.\d+)  → 匹配loss=后的小数
@@ -262,313 +263,279 @@ useEffect(() => {
   };
 
   return (
-    <div className="training-form">
+    <div className={styles.trainingForm}>
       <h1>MLX-LM-LoRA 训练配置</h1>
 
-      <div className="form-section">
-        <h2>基本配置</h2>
-        <div className="form-row">
-          <label>
-            model 模型路径:
-            <input
-              type="text"
-              value={config.model}
-              onChange={(e) => handleInputChange("model", e.target.value)}
-              placeholder="例如: mlx-community/Qwen2.5-7B-Instruct-4bit"
-            />
-          </label>
+      <div className={styles.modulesContainer}>
+        <div className={styles.formSection}>
+          <h2>基本配置</h2>
+          <div className={styles.formRow}>
+            <label>
+              model 模型路径:
+              <input
+                type="text"
+                value={config.model}
+                onChange={(e) => handleInputChange("model", e.target.value)}
+                placeholder="例如: mlx-community/Qwen2.5-7B-Instruct-4bit"
+              />
+            </label>
+            <label>
+              data 数据集路径:
+              <input
+                type="text"
+                value={config.data}
+                onChange={(e) => handleInputChange("data", e.target.value)}
+                placeholder="例如: ./data/train.jsonl"
+              />
+            </label>
+            <label>
+              trainType 训练类型:
+              <select
+                value={config.trainType}
+                onChange={(e) => handleInputChange("trainType", e.target.value)}
+              >
+                <option value="lora">LoRA</option>
+                <option value="dora">DoRA</option>
+                <option value="full">Full</option>
+              </select>
+            </label>
+            <label>
+              trainMode 训练模式:
+              <select
+                value={config.trainMode}
+                onChange={(e) => handleInputChange("trainMode", e.target.value)}
+              >
+                <option value="sft">SFT</option>
+                <option value="dpo">DPO</option>
+                <option value="cpo">CPO</option>
+                <option value="orpo">ORPO</option>
+                <option value="grpo">GRPO</option>
+                <option value="online_dpo">Online DPO</option>
+                <option value="xpo">XPO</option>
+                <option value="rlhf_reinforce">RLHF Reinforce</option>
+                <option value="ppo">PPO</option>
+              </select>
+            </label>
+          </div>
         </div>
-        <div className="form-row">
-          <label>
-            data 数据集路径:
-            <input
-              type="text"
-              value={config.data}
-              onChange={(e) => handleInputChange("data", e.target.value)}
-              placeholder="例如: ./data/train.jsonl"
-            />
-          </label>
+
+        <div className={styles.formSection}>
+          <h2>训练参数</h2>
+          <div className={styles.formRow}>
+            <label>
+              batchSize 批次大小:
+              <input
+                type="number"
+                value={config.batchSize}
+                onChange={(e) => handleInputChange("batchSize", parseInt(e.target.value))}
+              />
+            </label>
+            <label>
+              learningRate 学习率:
+              <input
+                type="number"
+                step="1e-6"
+                value={config.learningRate}
+                onChange={(e) => handleInputChange("learningRate", parseFloat(e.target.value))}
+              />
+            </label>
+            <label>
+              iters 迭代次数:
+              <input
+                type="number"
+                value={config.iters || ""}
+                onChange={(e) => handleInputChange("iters", e.target.value ? parseInt(e.target.value) : null)}
+                placeholder="留空则使用 epochs"
+              />
+            </label>
+            <label>
+              epochs 训练轮数:
+              <input
+                type="number"
+                value={config.epochs || ""}
+                onChange={(e) => handleInputChange("epochs", e.target.value ? parseInt(e.target.value) : null)}
+                placeholder="留空则使用 iters"
+              />
+            </label>
+            <label>
+              maxSeqLength 最大序列长度:
+              <input
+                type="number"
+                value={config.maxSeqLength}
+                onChange={(e) => handleInputChange("maxSeqLength", parseInt(e.target.value))}
+              />
+            </label>
+          </div>
         </div>
-        <div className="form-row">
-          <label>
-            trainType 训练类型:
-            <select
-              value={config.trainType}
-              onChange={(e) => handleInputChange("trainType", e.target.value)}
-            >
-              <option value="lora">LoRA</option>
-              <option value="dora">DoRA</option>
-              <option value="full">Full</option>
-            </select>
-          </label>
+
+        <div className={styles.formSection}>
+          <h2>LoRA 参数</h2>
+          <div className={styles.formRow}>
+            <label>
+              loraRank LoRA 秩:
+              <input
+                type="number"
+                value={config.loraRank}
+                onChange={(e) => handleInputChange("loraRank", parseInt(e.target.value))}
+              />
+            </label>
+            <label>
+              LoRA Dropout:
+              <input
+                type="number"
+                step="0.01"
+                value={config.loraDropout}
+                onChange={(e) => handleInputChange("loraDropout", parseFloat(e.target.value))}
+              />
+            </label>
+            <label>
+              LoRA Scale:
+              <input
+                type="number"
+                step="0.1"
+                value={config.loraScale}
+                onChange={(e) => handleInputChange("loraScale", parseFloat(e.target.value))}
+              />
+            </label>
+          </div>
         </div>
-        <div className="form-row">
-          <label>
-            trainMode 训练模式:
-            <select
-              value={config.trainMode}
-              onChange={(e) => handleInputChange("trainMode", e.target.value)}
-            >
-              <option value="sft">SFT</option>
-              <option value="dpo">DPO</option>
-              <option value="cpo">CPO</option>
-              <option value="orpo">ORPO</option>
-              <option value="grpo">GRPO</option>
-              <option value="online_dpo">Online DPO</option>
-              <option value="xpo">XPO</option>
-              <option value="rlhf_reinforce">RLHF Reinforce</option>
-              <option value="ppo">PPO</option>
-            </select>
-          </label>
+
+        <div className={styles.formSection}>
+          <h2>高级参数</h2>
+          <div className={styles.formRow}>
+            <label>
+              optimizer 优化器:
+              <select
+                value={config.optimizer}
+                onChange={(e) => handleInputChange("optimizer", e.target.value)}
+              >
+                <option value="adam">Adam</option>
+                <option value="adamw">AdamW</option>
+                <option value="muon">Muon</option>
+              </select>
+            </label>
+            <label>
+               梯度累积步数:
+              <input
+                type="number"
+                value={config.gradientAccumulationSteps}
+                onChange={(e) => handleInputChange("gradientAccumulationSteps", parseInt(e.target.value))}
+              />
+            </label>
+            <label>
+              valBatches 验证批次数量:
+              <input
+                type="number"
+                value={config.valBatches}
+                onChange={(e) => handleInputChange("valBatches", parseInt(e.target.value))}
+              />
+            </label>
+            <label>
+               每多少步报告一次:
+              <input
+                type="number"
+                value={config.stepsPerReport}
+                onChange={(e) => handleInputChange("stepsPerReport", parseInt(e.target.value))}
+              />
+            </label>
+            <label>
+              stepsPerEval 每多少步验证一次:
+              <input
+                type="number"
+                value={config.stepsPerEval}
+                onChange={(e) => handleInputChange("stepsPerEval", parseInt(e.target.value))}
+              />
+            </label>
+            <label>
+              saveEvery 每多少步保存一次:
+              <input
+                type="number"
+                value={config.saveEvery}
+                onChange={(e) => handleInputChange("saveEvery", parseInt(e.target.value))}
+              />
+            </label>
+            <label>
+              adapterPath 适配器保存路径:
+              <input
+                type="text"
+                value={config.adapterPath}
+                onChange={(e) => handleInputChange("adapterPath", e.target.value)}
+              />
+            </label>
+            <label>
+              gradCheckpoint 使用梯度检查点:
+              <input
+                type="checkbox"
+                checked={config.gradCheckpoint}
+                onChange={(e) => handleInputChange("gradCheckpoint", e.target.checked)}
+              />
+            </label>
+          </div>
+        </div>
+
+        <div className={styles.formSection}>
+          <h2>DPO/ORPO 参数</h2>
+          <div className={styles.formRow}>
+            <label>
+              Beta:
+              <input
+                type="number"
+                step="0.01"
+                value={config.beta}
+                onChange={(e) => handleInputChange("beta", parseFloat(e.target.value))}
+              />
+            </label>
+            <label>
+              lossType 损失类型:
+              <select
+                value={config.lossType}
+                onChange={(e) => handleInputChange("lossType", e.target.value)}
+              >
+                <option value="sigmoid">Sigmoid</option>
+                <option value="hinge">Hinge</option>
+                <option value="ipo">IPO</option>
+                <option value="dpop">DPOP</option>
+              </select>
+            </label>
+            <label>
+              Delta:
+              <input
+                type="number"
+                step="0.1"
+                value={config.delta}
+                onChange={(e) => handleInputChange("delta", parseFloat(e.target.value))}
+              />
+            </label>
+          </div>
         </div>
       </div>
 
-      <div className="form-section">
-        <h2>训练参数</h2>
-        <div className="form-row">
-          <label>
-            batchSize 批次大小:
-            <input
-              type="number"
-              value={config.batchSize}
-              onChange={(e) => handleInputChange("batchSize", parseInt(e.target.value))}
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            learningRate 学习率:
-            <input
-              type="number"
-              step="1e-6"
-              value={config.learningRate}
-              onChange={(e) => handleInputChange("learningRate", parseFloat(e.target.value))}
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            iters 迭代次数:
-            <input
-              type="number"
-              value={config.iters || ""}
-              onChange={(e) => handleInputChange("iters", e.target.value ? parseInt(e.target.value) : null)}
-              placeholder="留空则使用 epochs"
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            epochs 训练轮数:
-            <input
-              type="number"
-              value={config.epochs || ""}
-              onChange={(e) => handleInputChange("epochs", e.target.value ? parseInt(e.target.value) : null)}
-              placeholder="留空则使用 iters"
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            maxSeqLength 最大序列长度:
-            <input
-              type="number"
-              value={config.maxSeqLength}
-              onChange={(e) => handleInputChange("maxSeqLength", parseInt(e.target.value))}
-            />
-          </label>
-        </div>
-      </div>
-
-      <div className="form-section">
-        <h2>LoRA 参数</h2>
-        <div className="form-row">
-          <label>
-            loraRank LoRA 秩:
-            <input
-              type="number"
-              value={config.loraRank}
-              onChange={(e) => handleInputChange("loraRank", parseInt(e.target.value))}
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            LoRA Dropout:
-            <input
-              type="number"
-              step="0.01"
-              value={config.loraDropout}
-              onChange={(e) => handleInputChange("loraDropout", parseFloat(e.target.value))}
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            LoRA Scale:
-            <input
-              type="number"
-              step="0.1"
-              value={config.loraScale}
-              onChange={(e) => handleInputChange("loraScale", parseFloat(e.target.value))}
-            />
-          </label>
-        </div>
-      </div>
-
-      <div className="form-section">
-        <h2>高级参数</h2>
-        <div className="form-row">
-          <label>
-            optimizer 优化器:
-            <select
-              value={config.optimizer}
-              onChange={(e) => handleInputChange("optimizer", e.target.value)}
-            >
-              <option value="adam">Adam</option>
-              <option value="adamw">AdamW</option>
-              <option value="muon">Muon</option>
-            </select>
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            gradientAccumulationSteps 梯度累积步数:
-            <input
-              type="number"
-              value={config.gradientAccumulationSteps}
-              onChange={(e) => handleInputChange("gradientAccumulationSteps", parseInt(e.target.value))}
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            valBatches 验证批次数量:
-            <input
-              type="number"
-              value={config.valBatches}
-              onChange={(e) => handleInputChange("valBatches", parseInt(e.target.value))}
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            stepsPerReport 每多少步报告一次:
-            <input
-              type="number"
-              value={config.stepsPerReport}
-              onChange={(e) => handleInputChange("stepsPerReport", parseInt(e.target.value))}
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            stepsPerEval 每多少步验证一次:
-            <input
-              type="number"
-              value={config.stepsPerEval}
-              onChange={(e) => handleInputChange("stepsPerEval", parseInt(e.target.value))}
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            saveEvery 每多少步保存一次:
-            <input
-              type="number"
-              value={config.saveEvery}
-              onChange={(e) => handleInputChange("saveEvery", parseInt(e.target.value))}
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            adapterPath 适配器保存路径:
-            <input
-              type="text"
-              value={config.adapterPath}
-              onChange={(e) => handleInputChange("adapterPath", e.target.value)}
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            gradCheckpoint 使用梯度检查点:
-            <input
-              type="checkbox"
-              checked={config.gradCheckpoint}
-              onChange={(e) => handleInputChange("gradCheckpoint", e.target.checked)}
-            />
-          </label>
-        </div>
-      </div>
-
-      <div className="form-section">
-        <h2>DPO/ORPO 参数</h2>
-        <div className="form-row">
-          <label>
-            Beta:
-            <input
-              type="number"
-              step="0.01"
-              value={config.beta}
-              onChange={(e) => handleInputChange("beta", parseFloat(e.target.value))}
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            lossType 损失类型:
-            <select
-              value={config.lossType}
-              onChange={(e) => handleInputChange("lossType", e.target.value)}
-            >
-              <option value="sigmoid">Sigmoid</option>
-              <option value="hinge">Hinge</option>
-              <option value="ipo">IPO</option>
-              <option value="dpop">DPOP</option>
-            </select>
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            Delta:
-            <input
-              type="number"
-              step="0.1"
-              value={config.delta}
-              onChange={(e) => handleInputChange("delta", parseFloat(e.target.value))}
-            />
-          </label>
-        </div>
-      </div>
-
-      <div className="form-section">
+      <div className={styles.formSection}>
         <h2>训练控制</h2>
-        <div className="button-group">
+        <div className={styles.buttonGroup}>
           <button
             onClick={handleStartTraining}
             disabled={isTraining}
-            className="start-button"
+            className={styles.startButton}
           >
             开始训练
           </button>
           <button
             onClick={handleStopTraining}
             disabled={!isTraining}
-            className="stop-button"
+            className={styles.stopButton}
           >
             停止训练
           </button>
         </div>
-        {message && <div className="message">{message}</div>}
+        {message && <div className={styles.message}>{message}</div>}
       </div>
-      <div className="loss-chart" ref={chartRef} style={{ height: '400px', marginTop: '20px', width: '500px' }}></div>
+      <div className={styles.lossChart} ref={chartRef} style={{ height: '400px' }}></div>
 
       {isTraining && (
-        <div className="progress-section">
+        <div className={styles.progressSection}>
           <h2>训练进度</h2>
-          <div className="progress-info">
+          <div className={styles.progressInfo}>
             <div><strong>状态:</strong> {progress.status}</div>
             <div><strong>消息:</strong> {progress.message}</div>
             {progress.iteration > 0 && <div><strong>迭代:</strong> {progress.iteration}</div>}
@@ -579,13 +546,12 @@ useEffect(() => {
             {progress.tokensPerSecond != null && <div><strong>Token/秒:</strong> {progress.tokensPerSecond.toFixed(2)}</div>}
             {progress.peakMemory != null && <div><strong>峰值内存:</strong> {progress.peakMemory.toFixed(2)} GB</div>}
           </div>
-          {/* <div className="loss-chart" ref={chartRef} style={{ height: '400px', marginTop: '20px', width: '500px' }}></div> */}
           {logs.length > 0 && (
-            <div className="progress-log">
-              <h3>训练日志4448888s</h3>
-              <div className="log-content">
+            <div className={styles.progressLog}>
+              <h3>训练日志</h3>
+              <div className={styles.logContent}>
                 {logs.map((log, index) => (
-                  <div key={index} className="log-entry">{log}</div>
+                  <div key={index} className={styles.logEntry}>{log}</div>
                 ))}
               </div>
             </div>
