@@ -1,5 +1,5 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+
 import { pyInvoke } from "tauri-plugin-pytauri-api";
 import TrainingConfigForm from "./components/TrainingConfigForm";
 import "./App.css";

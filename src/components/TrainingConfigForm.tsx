@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { pyInvoke } from "tauri-plugin-pytauri-api";
+import * as echarts from 'echarts'; // 引入ECharts
 
 interface TrainingConfig {
   model: string;
@@ -99,6 +100,38 @@ export default function TrainingConfigForm() {
   const [message, setMessage] = useState("");
   const [logs, setLogs] = useState<string[]>([]);
 
+  const [Xdata,setXdata] = useState([]);
+  const [lossVal,setLossVal] = useState([]);
+ // 1. 创建ref关联DOM容器
+  const chartRef = useRef(null);
+  // 2. 声明echarts实例变量（避免重复创建）
+  const chartInstanceRef = useRef(null);
+
+// 提取loss值和时间的函数
+function extractLogInfo(logString) {
+    // 定义正则：同时匹配时间和loss值（用两个捕获组）
+    // 时间匹配：\[(\d{2}:\d{2})<  → 匹配[后、<前的 两位数字:两位数字
+    // loss匹配：loss=(\d+\.\d+)  → 匹配loss=后的小数
+    const logRegex = /\[(\d{2}:\d{2})<.*?loss=(\d+\.\d+)/;
+    const matchResult = logRegex.exec(logString);
+
+    // 初始化返回结果
+    const result = {
+        time: null,
+        loss: null
+    };
+
+    // 处理匹配结果
+    if (matchResult) {
+        result.time = matchResult[1]; // 第一个捕获组：时间（如02:12）
+        result.loss = Number(matchResult[2]); // 第二个捕获组：loss值（转数字）
+    } else {
+        console.warn("未找到时间或loss值");
+    }
+
+    return result;
+}
+
   useEffect(() => {
     let intervalId: number;
 
@@ -110,6 +143,14 @@ export default function TrainingConfigForm() {
         if (trainingStatus) {
           const progressData = await pyInvoke<TrainingProgress>("get_training_progress");
           setProgress(progressData);
+          console.log(progressData);
+         
+          const logInfo = extractLogInfo(progressData.message);
+          if (logInfo.loss !== null) {
+            setXdata((prev) => [...prev, logInfo.time]);
+            setLossVal((prev) => [...prev, logInfo.loss]);
+          }
+          
           
           const allLogs = await pyInvoke<string[]>("get_all_logs");
           if (allLogs.length > 0) {
@@ -131,10 +172,72 @@ export default function TrainingConfigForm() {
     };
   }, []);
 
+useEffect(() => {
+    // 3. 初始化ECharts实例
+    if (chartRef.current) {
+      const chartInstance = echarts.init(chartRef.current);
+      chartInstanceRef.current = chartInstance;
+    }
+
+    // 6. 组件卸载时销毁实例，防止内存泄漏
+    return () => {
+      if (chartInstanceRef.current) {
+        chartInstanceRef.current.dispose();
+        chartInstanceRef.current = null;
+      }
+    };
+  }, []); // 空依赖数组：仅在组件挂载/卸载时执行
+
+  // Update chart when loss history changes
+  useEffect(() => {
+    if (chartInstanceRef.current) {
+      chartInstanceRef.current.setOption({
+         title: {
+          text: 'Loss Curve'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        
+        xAxis: {
+          type: 'category',
+          data: Xdata
+        },
+        yAxis: {
+          type: 'value',
+          name: 'Loss',
+          axisLabel: {
+            formatter: '{value}'
+          }
+        },
+        series: [
+          {
+            name: 'Validation Loss',
+            type: 'line',
+            data: lossVal,
+            smooth: true,
+            showSymbol: false
+          }
+        ],
+      });
+    }
+    // console.log(lossVal);
+    // console.log(Xdata);
+  }, [lossVal]);
+
   const handleStartTraining = async () => {
     try {
       console.log("开始训练，配置:", config);
       setLogs([]);
+      // 重置 loss 历史记录
+      setXdata([]);
+      setLossVal([]);
       const result = await pyInvoke<string>("start_training", config);
       console.log("训练启动结果:", result);
       setMessage(result);
@@ -460,6 +563,7 @@ export default function TrainingConfigForm() {
         </div>
         {message && <div className="message">{message}</div>}
       </div>
+      <div className="loss-chart" ref={chartRef} style={{ height: '400px', marginTop: '20px', width: '500px' }}></div>
 
       {isTraining && (
         <div className="progress-section">
@@ -475,6 +579,7 @@ export default function TrainingConfigForm() {
             {progress.tokensPerSecond != null && <div><strong>Token/秒:</strong> {progress.tokensPerSecond.toFixed(2)}</div>}
             {progress.peakMemory != null && <div><strong>峰值内存:</strong> {progress.peakMemory.toFixed(2)} GB</div>}
           </div>
+          {/* <div className="loss-chart" ref={chartRef} style={{ height: '400px', marginTop: '20px', width: '500px' }}></div> */}
           {logs.length > 0 && (
             <div className="progress-log">
               <h3>训练日志4448888s</h3>
