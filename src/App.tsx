@@ -7,9 +7,17 @@ import "./App.css";
 function App() {
     const [greetMsg, setGreetMsg] = useState("");
     const [name, setName] = useState("");
+    const [checkbox, setCheckbox] = useState(false);
 
     async function greet() {
-        setGreetMsg(await pyInvoke("greet", { name }));
+        // setGreetMsg(await pyInvoke("greet", { name }));
+        console.log('start');
+        try {
+            const res = await pyInvoke("process_pdf", { pdf_path: name, use_vlm: checkbox });
+            console.log(res);
+        } catch (error) {
+            console.error("Error processing PDF:", error);
+        }
     }
 
     return (
@@ -24,9 +32,14 @@ function App() {
                 <input
                     id="greet-input"
                     onChange={(e) => setName(e.currentTarget.value)}
-                    placeholder="Enter a name..."
+                    placeholder="Enter a path to PDF..."
                 />
-                <button type="submit">测试调用 Python</button>
+                <input
+                    type="checkbox"
+                    checked={checkbox}
+                    onChange={(e) => setCheckbox(e.target.checked)}
+                />
+                <button type="submit">转换 PDF</button>
             </form>
             <p>{greetMsg}</p>
 
