@@ -54,6 +54,7 @@
 .formRow .formItem {
   display: flex;
   flex-direction: column;
+  font-size: 14px;
   gap: 0.5rem;
   font-weight: 500;
   /* color: #555; */
