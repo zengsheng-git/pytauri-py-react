@@ -17,6 +17,8 @@ uv venv reactpy.venv && source reactpy.venv/bin/activate && uv pip install "mlx>
    ```
    uv pip install "mlx>=0.29.3" "transformers>=4.39.3" numpy datasets mlx-lm pytauri pytauri-wheel
 
+试试训练的其他命令是否有用
+
 `/Users/apple/Desktop/mlx/pytauri-py-react/pysrc/mlx_lm_lora` 这个里面所有的训练参数都在前端页面的表单中吗？
 
 把 mlx_lm_lora整合进去，需要跑起来。
@@ -25,4 +27,10 @@ uv venv reactpy.venv && source reactpy.venv/bin/activate && uv pip install "mlx>
 
 难点 通读收集 所有的参数 去编写表单
 
+难点 但是 react-desktop 没有表单组件比如下拉框，很多其他的都没有
+
 难点 训练进度的实时体现
+
+生成的东西放哪需要自定义
+
+react-desktop 不支持 raect19 ，最高支持 react 16
