@@ -34,3 +34,20 @@ uv venv reactpy.venv && source reactpy.venv/bin/activate && uv pip install "mlx>
 生成的东西放哪需要自定义
 
 react-desktop 不支持 raect19 ，最高支持 react 16
+
+
+/Users/apple/Desktop/mlx/2.pdf
+
+{
+    "iteration": 0,
+    "train_loss": null,
+    "val_loss": null,
+    "learning_rate": null,
+    "tokens_per_second": null,
+    "iterations_per_second": null,
+    "peak_memory": null,
+    "status": "training",
+    "message": "Training:  46%|####6     | 277/600 [01:50<01:59,  2.71it/s, loss=0.948, it/s=2.849]"
+}
+[2.137,2.137,2.137,2.137,1.602,1.602,1.602,1.602,1.309,1.309,1.309,1.123,1.123]
+["00:08","00:09","00:10","00:12","00:12","00:13","00:14","00:15","00:16","00:17","00:18","00:19","00:20"]

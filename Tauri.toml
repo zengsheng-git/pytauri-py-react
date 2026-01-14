@@ -11,10 +11,10 @@ withGlobalTauri = true
 
 [[app.windows]]
 title = "Mlx-lm-lora"
-width = 1280
+width = 900
 height = 768
 
-minWidth = 1280
+minWidth = 900
 minHeight = 768
 
 maxWidth = 1920
