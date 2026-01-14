@@ -194,85 +194,79 @@ export default function TrainingConfigForm() {
     };
   }, []);
 
+  // Update chart when loss history changes or isTraining changes
   useEffect(() => {
-    // 3. 初始化ECharts实例
+    // 确保容器存在且已初始化图表实例
     if (chartRef.current) {
-      const chartInstance = echarts.init(chartRef.current);
-      chartInstanceRef.current = chartInstance;
-    }
-
-    // 6. 组件卸载时销毁实例，防止内存泄漏
-    return () => {
-      if (chartInstanceRef.current) {
-        chartInstanceRef.current.dispose();
-        chartInstanceRef.current = null;
+      // 如果图表实例不存在，重新创建
+      if (!chartInstanceRef.current) {
+        const chartInstance = echarts.init(chartRef.current);
+        chartInstanceRef.current = chartInstance;
       }
-    };
-  }, []); // 空依赖数组：仅在组件挂载/卸载时执行
 
-  // Update chart when loss history changes
-  useEffect(() => {
-    if (chartInstanceRef.current) {
-      chartInstanceRef.current.setOption({
-        backgroundColor: "transparent",
-        // title: {
+      // 更新图表数据
+      if (chartInstanceRef.current) {
+        chartInstanceRef.current.setOption({
+          backgroundColor: "transparent",
+           // title: {
         //   text: "Loss Curve",
         //   textStyle: {
         //     color: "#fff",
         //   },
         // },
-        tooltip: {
-          trigger: "axis",
-        },
-        grid: {
-          top: "5%",
-          left: "0%",
-          right: "0%",
-          bottom: "0%",
-          containLabel: true,
-        },
+          tooltip: {
+            trigger: "axis",
+          },
+          grid: {
+            top: "5%",
+            left: "0%",
+            right: "0%",
+            bottom: "0%",
+            containLabel: true,
+          },
 
-        xAxis: {
-          type: "category",
-          data: Xdata,
-          // axisLabel: {
+          xAxis: {
+            type: "category",
+            data: Xdata,
+             // axisLabel: {
           //   textStyle: {
           //     color: "#fff",
           //   },
           // },
-        },
-        yAxis: {
-          type: "value",
-          // name: "Loss",
+          },
+          yAxis: {
+            type: "value",
+            // name: "Loss",
           // nameTextStyle: {
           //   color: "#fff",
           // },
-          axisLabel: {
-            formatter: "{value}",
-            // textStyle: {
+            axisLabel: {
+              formatter: "{value}",
+               // textStyle: {
             //   color: "#fff",
             // },
-          },
-          splitLine: {
-            lineStyle: {
-              color: "#aaa", // 分割线颜色（浅灰色，支持十六进制/rgb/rgba）
+            },
+            splitLine: {
+              lineStyle: {
+                color: "#aaa",
+              },
             },
           },
-        },
-        series: [
-          {
-            name: "Validation Loss",
-            type: "line",
-            data: lossVal,
-            smooth: true,
-            showSymbol: false,
-          },
-        ],
-      });
+          series: [
+            {
+              name: "Validation Loss",
+              type: "line",
+              data: lossVal,
+              smooth: true,
+              showSymbol: false,
+            },
+          ],
+        });
+      }
     }
-    // console.log(lossVal);
+       // console.log(lossVal);
     // console.log(Xdata);
-  }, [lossVal]);
+  }, [lossVal, Xdata, isTraining]);
 
   const handleStartTraining = async () => {
     try {
@@ -622,7 +616,7 @@ export default function TrainingConfigForm() {
         </div>
       </div>
 
-      <div className="">
+      <div className="mb-4">
         <h2>训练控制</h2>
         <div className="flex gap-2 my-4">
           <Button
@@ -642,6 +636,7 @@ export default function TrainingConfigForm() {
             停止训练
           </Button>
         </div>
+
         {message && (
           <Card>
             <CardHeader>
