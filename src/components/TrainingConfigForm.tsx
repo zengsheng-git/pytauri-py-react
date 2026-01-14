@@ -108,7 +108,7 @@ export default function TrainingConfigForm() {
 
   const [isTraining, setIsTraining] = useState(false);
   const [progress, setProgress] = useState<TrainingProgress>({
-  iteration: 0,
+    iteration: 0,
     trainLoss: null,
     valLoss: null,
     learningRate: null,
@@ -208,12 +208,12 @@ export default function TrainingConfigForm() {
       if (chartInstanceRef.current) {
         chartInstanceRef.current.setOption({
           backgroundColor: "transparent",
-           // title: {
-        //   text: "Loss Curve",
-        //   textStyle: {
-        //     color: "#fff",
-        //   },
-        // },
+          // title: {
+          //   text: "Loss Curve",
+          //   textStyle: {
+          //     color: "#fff",
+          //   },
+          // },
           tooltip: {
             trigger: "axis",
           },
@@ -228,23 +228,23 @@ export default function TrainingConfigForm() {
           xAxis: {
             type: "category",
             data: Xdata,
-             // axisLabel: {
-          //   textStyle: {
-          //     color: "#fff",
-          //   },
-          // },
+            // axisLabel: {
+            //   textStyle: {
+            //     color: "#fff",
+            //   },
+            // },
           },
           yAxis: {
             type: "value",
             // name: "Loss",
-          // nameTextStyle: {
-          //   color: "#fff",
-          // },
-            axisLabel: {
-              formatter: "{value}",
-               // textStyle: {
+            // nameTextStyle: {
             //   color: "#fff",
             // },
+            axisLabel: {
+              formatter: "{value}",
+              // textStyle: {
+              //   color: "#fff",
+              // },
             },
             splitLine: {
               lineStyle: {
@@ -264,7 +264,7 @@ export default function TrainingConfigForm() {
         });
       }
     }
-       // console.log(lossVal);
+    // console.log(lossVal);
     // console.log(Xdata);
   }, [lossVal, Xdata, isTraining]);
 
@@ -320,7 +320,7 @@ export default function TrainingConfigForm() {
                 />
               </div>
               <div className={styles.formItem}>
-                 数据集路径:
+                数据集路径:
                 <Input
                   value={config.data}
                   onChange={(e) => handleInputChange("data", e.target.value)}
@@ -328,7 +328,7 @@ export default function TrainingConfigForm() {
                 />
               </div>
               <div className={styles.formItem}>
-                 训练类型:
+                训练类型:
                 <Select
                   value={config.trainType}
                   onChange={(e) =>
@@ -341,7 +341,7 @@ export default function TrainingConfigForm() {
                 </Select>
               </div>
               <div className={styles.formItem}>
-                 训练模式:
+                训练模式:
                 <Select
                   value={config.trainMode}
                   onChange={(e) =>
@@ -372,7 +372,7 @@ export default function TrainingConfigForm() {
             <CardContent>
               <div className={styles.formRow}>
                 <div className={styles.formItem}>
-                   批次大小:
+                  批次大小:
                   <Input
                     value={config.batchSize}
                     onChange={(e) =>
@@ -381,7 +381,7 @@ export default function TrainingConfigForm() {
                   />
                 </div>
                 <div className={styles.formItem}>
-                   学习率:
+                  学习率:
                   <Input
                     step="1e-6"
                     value={config.learningRate}
@@ -394,7 +394,7 @@ export default function TrainingConfigForm() {
                   />
                 </div>
                 <div className={styles.formItem}>
-                   迭代次数:
+                  迭代次数:
                   <Input
                     value={config.iters || ""}
                     onChange={(e) =>
@@ -407,7 +407,7 @@ export default function TrainingConfigForm() {
                   />
                 </div>
                 <div className={styles.formItem}>
-                   训练轮数:
+                  训练轮数:
                   <Input
                     value={config.epochs || ""}
                     onChange={(e) =>
@@ -420,7 +420,7 @@ export default function TrainingConfigForm() {
                   />
                 </div>
                 <div className={styles.formItem}>
-                   最大序列长度:
+                  最大序列长度:
                   <Input
                     value={config.maxSeqLength}
                     onChange={(e) =>
@@ -441,7 +441,7 @@ export default function TrainingConfigForm() {
             <CardContent>
               <div className={styles.formRow}>
                 <div className={styles.formItem}>
-                   LoRA 秩:
+                  LoRA 秩:
                   <Input
                     value={config.loraRank}
                     onChange={(e) =>
@@ -485,7 +485,7 @@ export default function TrainingConfigForm() {
             <CardContent>
               <div className={styles.formRow}>
                 <div className={styles.formItem}>
-                   优化器:
+                  优化器:
                   <Select
                     value={config.optimizer}
                     onChange={(e) =>
@@ -510,7 +510,7 @@ export default function TrainingConfigForm() {
                   />
                 </div>
                 <div className={styles.formItem}>
-                   验证批次数量:
+                  验证批次数量:
                   <Input
                     value={config.valBatches}
                     onChange={(e) =>
@@ -531,7 +531,7 @@ export default function TrainingConfigForm() {
                   />
                 </div>
                 <div className={styles.formItem}>
-                   每多少步验证一次:
+                  每多少步验证一次:
                   <Input
                     value={config.stepsPerEval}
                     onChange={(e) =>
@@ -543,7 +543,7 @@ export default function TrainingConfigForm() {
                   />
                 </div>
                 <div className={styles.formItem}>
-                   每多少步保存一次:
+                  每多少步保存一次:
                   <Input
                     value={config.saveEvery}
                     onChange={(e) =>
@@ -552,7 +552,7 @@ export default function TrainingConfigForm() {
                   />
                 </div>
                 <div className={styles.formItem}>
-                   适配器保存路径:
+                  适配器保存路径:
                   <Input
                     value={config.adapterPath}
                     onChange={(e) =>
@@ -561,7 +561,7 @@ export default function TrainingConfigForm() {
                   />
                 </div>
                 <div className={styles.formItem}>
-                   使用梯度检查点:
+                  使用梯度检查点:
                   <Switch
                     checked={config.gradCheckpoint}
                     onChange={(e) => handleInputChange("gradCheckpoint", e)}
@@ -587,7 +587,7 @@ export default function TrainingConfigForm() {
                   />
                 </div>
                 <div className={styles.formItem}>
-                   损失类型:
+                  损失类型:
                   <Select
                     value={config.lossType}
                     onChange={(e) =>
@@ -647,19 +647,8 @@ export default function TrainingConfigForm() {
         )}
       </div>
 
-      {isTraining && (
-        <div className="w-full flex flex-col gap-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Loss Curve</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div
-                ref={chartRef}
-                style={{ height: "400px", width: "100%" }}
-              ></div>
-            </CardContent>
-          </Card>
+      <div className="w-full flex flex-col gap-4">
+        {isTraining && (
           <Card>
             <CardHeader>
               <CardTitle>训练进度</CardTitle>
@@ -708,12 +697,14 @@ export default function TrainingConfigForm() {
                 )}
                 {progress.tokensPerSecond != null && (
                   <div>
-                    <strong>Token/秒:</strong> {progress.tokensPerSecond.toFixed(2)}
+                    <strong>Token/秒:</strong>{" "}
+                    {progress.tokensPerSecond.toFixed(2)}
                   </div>
                 )}
                 {progress.peakMemory != null && (
                   <div>
-                    <strong>峰值内存:</strong> {progress.peakMemory.toFixed(2)} GB
+                    <strong>峰值内存:</strong> {progress.peakMemory.toFixed(2)}{" "}
+                    GB
                   </div>
                 )}
               </div>
@@ -732,8 +723,21 @@ export default function TrainingConfigForm() {
               )}
             </CardContent>
           </Card>
-        </div>
-      )}
+        )}
+        {isTraining && lossVal.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Loss Curve</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div
+                ref={chartRef}
+                style={{ height: "400px", width: "100%" }}
+              ></div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </div>
   );
 }
