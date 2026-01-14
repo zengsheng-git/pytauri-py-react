@@ -3,6 +3,7 @@ import { pyInvoke } from "tauri-plugin-pytauri-api";
 import * as echarts from "echarts"; // 引入ECharts
 import styles from "./TrainingConfigForm.module.css"; // 导入 CSS module
 import { Input, Button, Select, Switch, Checkbox } from "@pikoloo/darwin-ui";
+import { Progress, CircularProgress } from "@pikoloo/darwin-ui";
 import {
   Badge,
   Card,
@@ -120,7 +121,7 @@ export default function TrainingConfigForm() {
   });
   const [message, setMessage] = useState("");
   const [logs, setLogs] = useState<string[]>([]);
-
+  const [progressValue, setProgressValue] = useState(0);
   const [Xdata, setXdata] = useState([]);
   const [lossVal, setLossVal] = useState([]);
   // 1. 创建ref关联DOM容器
@@ -153,6 +154,28 @@ export default function TrainingConfigForm() {
     return result;
   }
 
+  function parseTrainingLog(logStr: string) {
+    // 提取百分比（如46%）
+    const percentMatch = logStr.match(/(\d+)%/);
+    const percent = percentMatch ? parseInt(percentMatch[1]) : 0;
+
+    // 提取已完成数/总数（如277/600）
+    const iterMatch = logStr.match(/(\d+)\/(\d+)/);
+    const completed = iterMatch ? parseInt(iterMatch[1]) : 0;
+    const total = iterMatch ? parseInt(iterMatch[2]) : 0;
+
+    // 提取耗时/剩余时间（如01:50<01:59）
+    const timeMatch = logStr.match(/\[(\d+:\d+)<(\d+:\d+)/);
+    const elapsed = timeMatch ? timeMatch[1] : "00:00";
+    const remaining = timeMatch ? timeMatch[2] : "00:00";
+
+    // 提取损失值（如loss=0.948）
+    const lossMatch = logStr.match(/loss=(\d+\.\d+)/);
+    const loss = lossMatch ? parseFloat(lossMatch[1]) : 0.0;
+
+    return { percent, completed, total, elapsed, remaining, loss };
+  }
+
   useEffect(() => {
     let intervalId: number;
 
@@ -167,6 +190,9 @@ export default function TrainingConfigForm() {
           );
           setProgress(progressData);
           console.log(progressData);
+
+          const parsedLog = parseTrainingLog(progressData.message);
+          setProgressValue(parsedLog.percent);
 
           const logInfo = extractLogInfo(progressData.message);
           if (logInfo.loss !== null) {
@@ -655,6 +681,7 @@ export default function TrainingConfigForm() {
             </CardHeader>
             <CardContent>
               <div className="flex flex-col gap-4 text-[14px]">
+                <Progress variant="gradient" value={progressValue} showValue />
                 <div className="flex w-full items-center gap-2">
                   <div>状态:</div>
                   <Badge className="Badge" variant="info">
