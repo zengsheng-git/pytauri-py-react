@@ -35,6 +35,7 @@ uv venv reactpy.venv && source reactpy.venv/bin/activate && uv pip install "mlx>
 
 react-desktop 不支持 raect19 ，最高支持 react 16
 
+打包成一个exe ，dmg 安装包
 
 /Users/apple/Desktop/mlx/2.pdf
 
@@ -51,3 +52,23 @@ react-desktop 不支持 raect19 ，最高支持 react 16
 }
 [2.137,2.137,2.137,2.137,1.602,1.602,1.602,1.602,1.309,1.309,1.309,1.123,1.123]
 ["00:08","00:09","00:10","00:12","00:12","00:13","00:14","00:15","00:16","00:17","00:18","00:19","00:20"]
+
+## 工作空间
+
+### Embedding 训练数据生成
+Input 目录 
+Output 缓存目录
+Output 目录
+训练结果名称
+
+### 模型服务配置
+模型服务类型
+模型名称
+云端地址
+API Key
+
+### 配置管理
+配置名称
+`保存配置`
+`读取已有配置`
+`执行生成 Embedding 数据`
