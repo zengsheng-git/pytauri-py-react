@@ -294,6 +294,10 @@ export default function TrainingConfigForm() {
     // console.log(Xdata);
   }, [lossVal, Xdata, isTraining]);
 
+  useEffect(() => {
+    getAllConfigs();
+  }, []);
+
   const handleStartTraining = async () => {
     try {
       console.log("开始训练，配置:", config);
@@ -324,6 +328,39 @@ export default function TrainingConfigForm() {
   const handleInputChange = (field: keyof TrainingConfig, value: any) => {
     console.log(field, value);
     setConfig((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const saveConfig = async () => {
+    try {
+      const result = await pyInvoke<string>("save_config", {
+        config_name: 'configNametest',
+        config: config,
+      });
+      console.log(result);
+    } catch (error) {
+      console.error("保存配置失败:", error);
+    }
+  };
+
+  const loadConfig = async () => {
+    try {
+      const result = await pyInvoke<TrainingConfig>("load_config", {
+        config_name: 'configNametest',
+      });
+      console.log(result);
+      setConfig(result);
+    } catch (error) {
+      console.error("加载配置失败:", error);
+    }
+  };
+
+  const getAllConfigs = async () => {
+    try {
+      const result: { configs: string[] } = await pyInvoke("list_configs",{});
+      console.log(result.configs);
+    } catch (error) {
+      console.error("获取所有配置失败:", error);
+    }
   };
 
   return (
@@ -661,6 +698,23 @@ export default function TrainingConfigForm() {
           >
             停止训练
           </Button>
+
+          <Button
+            className="cursor-pointer"
+            onClick={saveConfig}
+            variant="destructive"
+          >
+            保存配置
+          </Button>
+
+           <Button
+            className="cursor-pointer"
+            onClick={loadConfig}
+            variant="destructive"
+          >
+            加载配置
+          </Button>
+
         </div>
 
         {message && (

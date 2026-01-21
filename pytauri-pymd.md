@@ -72,3 +72,40 @@ API Key
 `保存配置`
 `读取已有配置`
 `执行生成 Embedding 数据`
+
+
+
+`/Users/apple/Desktop/mlx/pytauri-py-react` `/Users/apple/Desktop/mlx/mlx-lm-lora` 回顾之前我们的对话，说明这两个项目有什么关系
+
+<!-- 
+
+npm run build
+npx tauri build --config src-tauri/tauri.conf.json
+cd src-tauri && cargo build --release
+cd src-tauri && npx tauri build
+
+python3 -m pip install --user --break-system-packages -e .
+python3 -m pip install --user --break-system-packages docling
+python3 -m pip install --user --break-system-packages markdown2
+python3 -m pip install --user --break-system-packages weasyprint
+
+python3 -m pip install --user --break-system-packages hatchling
+python3 -m pip install --user --break-system-packages hatch
+python3 -m pip install --user --break-system-packages build
+python3 -m hatch build
+python3 -m build 
+
+-->
+
+python3 -m pip wheel --no-deps -w dist .
+python3 -m pip install --user --break-system-packages dist/pytauri_react_starter-0.1.0-py3-none-any.whl
+/Users/apple/Library/Python/3.13/bin/pytauri-react-starter
+
+ which pytauri-react-starter
+/Users/apple/Desktop/mlx/pytauri-py-react/reactpy.venv/bin/pytauri-react-starter
+
+python3 -m pip install --user --break-system-packages pyinstaller
+
+python3 -m pip show pytauri_wheel
+python3 -m pip wheel .
+python3 -m pip install --user --break-system-packages pytauri_react_starter-0.1.0-py3-none-any.whl
