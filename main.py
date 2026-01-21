@@ -12,6 +12,9 @@ from pysrc.commands import commands
 
 # Configuration
 BACKEND_DIR = Path(__file__).parent.absolute()
+print(f"BACKEND_DIR: {BACKEND_DIR}")
+print(f"Build directory exists: {BACKEND_DIR.joinpath('build').exists()}")
+print(f"Index.html exists: {BACKEND_DIR.joinpath('build', 'index.html').exists()}")
 DEV_MODE = environ.get("PYTAURI_REACT_DEV") == "1"
 # DEV_MODE = True
 
@@ -33,10 +36,18 @@ def main() -> int:
                 "build": {"frontendDist": "http://localhost:1420"},
             }
         else:
-            tauri_config = None
+            # Set the frontendDist to the build directory relative to BACKEND_DIR
+            tauri_config = {
+                "build": {"frontendDist": str(BACKEND_DIR.joinpath("build"))},
+            }
+        print(f"Tauri config: {tauri_config}")
+
+        # Create context and print its properties
+        context = context_factory(BACKEND_DIR, tauri_config=tauri_config)
+        print(f"Context created successfully")
 
         app = builder_factory().build(
-            context=context_factory(BACKEND_DIR, tauri_config=tauri_config),
+            context=context,
             invoke_handler=commands.generate_handler(portal),
             plugins=(opener.init(),),
         )

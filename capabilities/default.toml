@@ -5,6 +5,7 @@ windows = ["main"]
 permissions = [
     "core:default",
     "pytauri:default", # need for pytauri ipc
+    "pytauri:allow-pyfunc", # allow pyfunc command
     "dialog:default",
     "opener:default"
 ]

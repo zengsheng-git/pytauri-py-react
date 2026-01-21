@@ -28,7 +28,9 @@ include = [
     "icons/icon.ico",
     "README.md",
     "LICENSE",
-    "build/"
+    "build/",
+    "pysrc/",
+    "src-tauri/"
 ]
 
 [dependency-groups]

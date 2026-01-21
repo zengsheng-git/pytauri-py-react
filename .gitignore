@@ -5,3 +5,5 @@ __pycache__/
 .history
 mac
 macTest.tsx
+build
+dist
